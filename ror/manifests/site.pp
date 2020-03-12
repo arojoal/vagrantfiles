@@ -71,4 +71,45 @@ node default {
     user     => 'ror',
     password => 'ror',
   }
+
+
+# hmobile
+
+
+  ## install mysql with root password 'root'
+
+  $ruby_packages = ['ruby', 'ruby-dev', 'build-essential', 'libsqlite3-dev', 'zlib1g-dev']
+
+  package {$ruby_packages:
+    ensure => present
+  }
+
+  class {'mysql::server':
+    root_pass  => 'root',
+    backup_dir => '/srv/backup',
+    s3_backup  => false,
+    require    => File['backup_dir']
+  }
+
+  ## make available specific version of rbenv used in staff-rails project
+  rbenv::plugin { [ 'rbenv/rbenv-vars', 'rbenv/ruby-build' ]: }
+  rbenv::build { '2.4.2': global => true }
+
+  ## to share terminal
+  package { 'tmate':
+    ensure => present
+  }
+
+  ## to be able to run rails 5.2 system tests
+  package { ['firefox-geckodriver', :
+    ensure => present
+  }
+
+  ## requirement of gem mini_magick
+  ## already required by global site.pp
+  # package { 'imagemagick':
+  #   ensure  => present
+  # }
+
+# hmobile
 }
