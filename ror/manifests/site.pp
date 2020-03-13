@@ -107,5 +107,10 @@ node default {
   #   ensure  => present
   # }
 
+  ## create database for staff-rails
+  mysql::db {['hmobile_oportunities_development', 'hmobile_oportunities_test']:
+    collation_name => 'utf8_general_ci'
+  }
+
 # hmobile
 }
