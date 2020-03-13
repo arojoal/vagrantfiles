@@ -91,10 +91,6 @@ node default {
     require    => File['backup_dir']
   }
 
-  ## make available specific version of rbenv used in staff-rails project
-  rbenv::plugin { [ 'rbenv/rbenv-vars', 'rbenv/ruby-build' ]: }
-  rbenv::build { '2.4.2': global => true }
-
   ## to share terminal
   package { 'tmate':
     ensure => present
