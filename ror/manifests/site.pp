@@ -75,6 +75,10 @@ node default {
 
 # hmobile
 
+  ## prefered system utilities
+  package { ['aptitude', 'bash-completion'] :
+    ensure => present
+  }
 
   ## install mysql with root password 'root'
 
