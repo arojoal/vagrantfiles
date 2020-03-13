@@ -97,7 +97,7 @@ node default {
   }
 
   ## to be able to run rails 5.2 system tests
-  package { ['firefox-geckodriver', :
+  package { 'firefox-geckodriver' :
     ensure => present
   }
 
