@@ -5,6 +5,7 @@ Stage[pre] -> Stage[main] -> Stage[post]
 
 node default {
 
+  include common
   include ntp
   include nodejs
 
@@ -26,6 +27,11 @@ node default {
     value => 'development',
   }
 
+
+  # do not let heroku script to install ruby. It can get stuck during interactive install
+  package { 'ruby' :
+    ensure => present
+  }
   exec { 'installing_heroku_tools':
     command  => 'wget -O- https://toolbelt.heroku.com/install-ubuntu.sh | sh',
     user     => 'root',
@@ -82,7 +88,7 @@ node default {
 
   ## install mysql with root password 'root'
 
-  $ruby_packages = ['ruby', 'ruby-dev', 'build-essential', 'libsqlite3-dev', 'zlib1g-dev']
+  $ruby_packages = ['ruby-dev', 'build-essential', 'libsqlite3-dev', 'zlib1g-dev']
 
   package {$ruby_packages:
     ensure => present
@@ -115,6 +121,12 @@ node default {
   mysql::db {['hmobile_oportunities_development', 'hmobile_oportunities_test']:
     collation_name => 'utf8_general_ci'
   }
+
+  ## make available specific version of rbenv used in staff-rails project
+  class { 'rbenv': }
+  rbenv::plugin { [ 'rbenv/ruby-build' ]: }
+  rbenv::build { '2.6.5': global => true }
+  rbenv::gem { 'bundler': version => '1.17.3', ruby_version  => '2.6.5' }
 
 # hmobile
 }
