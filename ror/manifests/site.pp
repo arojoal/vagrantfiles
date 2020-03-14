@@ -82,7 +82,7 @@ node default {
 # hmobile
 
   ## prefered system utilities
-  package { ['aptitude', 'bash-completion'] :
+  package { ['aptitude', 'bash-completion', 'htop', 'tmate'] :
     ensure => present
   }
 
@@ -99,11 +99,6 @@ node default {
     backup_dir => '/srv/backup',
     s3_backup  => false,
     require    => File['backup_dir']
-  }
-
-  ## to share terminal
-  package { 'tmate':
-    ensure => present
   }
 
   ## to be able to run rails 5.2 system tests
