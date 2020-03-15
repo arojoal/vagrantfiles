@@ -82,7 +82,7 @@ node default {
 # hmobile
 
   ## prefered system utilities
-  package { ['aptitude', 'bash-completion', 'htop', 'tmate', 'net-tools'] :
+  package { ['aptitude', 'bash-completion', 'htop', 'tmate', 'net-tools', 'rsync'] :
     ensure => present
   }
 
