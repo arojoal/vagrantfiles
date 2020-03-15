@@ -123,5 +123,15 @@ node default {
   rbenv::build { '2.6.5': global => true }
   rbenv::gem { 'bundler': version => '1.17.3', ruby_version  => '2.6.5' }
 
+  # allow compilation of curb 0.9.6 with native extensions
+  package { 'libcurl4-openssl-dev' :
+    ensure => present
+  }
+
+  # allow compilation of pg 1.0.0 with native extensions
+  package { 'libpq-dev' :
+    ensure => present
+  }
+
 # hmobile
 }
