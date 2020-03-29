@@ -122,8 +122,8 @@ node default {
   rbenv::plugin { [ 'rbenv/ruby-build' ]: }
   rbenv::build { '2.6.5': global => true }
   rbenv::build { '2.4.6': global => true }
-  rbenv::gem { 'bundler': version => '1.17.3', ruby_version  => '2.6.5' }
-  rbenv::gem { 'bundler': version => '1.17.3', ruby_version  => '2.4.6' }
+  rbenv::gem { 'bundler_for_26': gem => 'bundler', version => '1.17.3', ruby_version  => '2.6.5' }
+  rbenv::gem { 'bundler_for_24': gem => 'bundler', version => '1.17.3', ruby_version  => '2.4.6' }
 
   # allow compilation of curb 0.9.6 with native extensions
   package { 'libcurl4-openssl-dev' :
