@@ -60,6 +60,31 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.synced_folder "data", "/vagrant_data"
   config.vm.synced_folder "www", "/var/www"
 
+  # solve permissions problems using lxc.
+  # this requires `vagrant plugin install vagrant-bindfs`
+  #config.vm.provider "lxc" do |lxc, override|
+
+  #  # create fuse node until created by lxc. See https://github.com/maruos/maruos/issues/65#issuecomment-287817903
+  #  override.vm.provision :shell, run: 'always', name: 'creating fuse /dev node' do |shell|
+  #    shell.inline = "[ -e /dev/fuse ] || mknod -m 666 /dev/fuse c 10 229"
+  #  end
+  #  override.vm.synced_folder "www", "/var/www", disabled: true
+  #  override.vm.synced_folder "www", "/var/www-lxc"
+  #  override.bindfs.bind_folder "/var/www-lxc", "/var/www", after: :provision
+  #end
+
+  # to solve realtime changes and permission issues
+  #
+  # this needs `vagrant plugin install vagrant-bindfs` and comment
+  # previous share of 'www' above
+  #
+  # config.vm.synced_folder "www", "/var/www-nfs", type: "nfs"
+  # config.bindfs.bind_folder "/var/www-nfs", "/var/www"
+  
+  # mount_options taken from https://stackoverflow.com/a/28118716
+  # config.vm.synced_folder "www", "/var/www-nfs", type: "nfs", mount_options: ['nolock,vers=3,udp,noatime,actimeo=1']
+  # config.bindfs.bind_folder "/var/www-nfs", "/var/www"
+
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
   # Example for VirtualBox:
