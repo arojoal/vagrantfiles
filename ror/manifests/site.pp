@@ -86,7 +86,6 @@ node default {
     ensure => present
   }
 
-  ## install mysql with root password 'root'
 
   $ruby_packages = ['ruby-dev', 'build-essential', 'libsqlite3-dev', 'zlib1g-dev']
 
@@ -94,11 +93,9 @@ node default {
     ensure => present
   }
 
-  class {'mysql::server':
-    root_pass  => 'root',
-    backup_dir => '/srv/backup',
-    s3_backup  => false,
-    require    => File['backup_dir']
+  ## install mysql with root password 'root'
+  class { 'mysql::server':
+    root_password => 'root'
   }
 
   ## to be able to run rails 5.2 system tests
@@ -114,7 +111,10 @@ node default {
 
   ## create database for staff-rails
   mysql::db {['hmobile_oportunities_development', 'hmobile_oportunities_test']:
-    collation_name => 'utf8_general_ci'
+    user => 'root',
+    password => 'root',
+    collate => 'utf8_general_ci',
+    require => Class['mysql::server'],
   }
 
   ## make available specific version of rbenv used in staff-rails project
