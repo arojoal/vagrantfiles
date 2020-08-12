@@ -23,6 +23,10 @@ node default {
     provider => shell
   }
 
+  package { ['npm'] :
+    ensure => present
+  }
+
 # flumen
 
   ## prefered system utilities
