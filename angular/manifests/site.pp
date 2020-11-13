@@ -7,6 +7,7 @@ node default {
 
   include common
   include ntp
+  include nodejs
 
   common::set_localtime{'set_localtime':
     zone => 'Europe/Madrid'
@@ -23,14 +24,10 @@ node default {
     provider => shell
   }
 
-  package { ['npm'] :
-    ensure => present
-  }
-
 # flumen
 
   ## prefered system utilities
-  package { ['aptitude', 'bash-completion', 'htop', 'tmate', 'net-tools', 'rsync', 'git-flow'] :
+  package { ['aptitude', 'bash-completion', 'htop', 'tmate', 'net-tools', 'rsync', 'git-flow', 'gitk', 'git-gui'] :
     ensure => present
   }
 
