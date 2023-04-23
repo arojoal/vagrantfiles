@@ -86,6 +86,7 @@ node default {
     ensure => present
   }
 
+  ## install mysql with root password 'root'
 
   $ruby_packages = ['ruby-dev', 'build-essential', 'libsqlite3-dev', 'zlib1g-dev']
 
@@ -93,9 +94,11 @@ node default {
     ensure => present
   }
 
-  ## install mysql with root password 'root'
-  class { 'mysql::server':
-    root_password => 'root'
+  class {'mysql::server':
+    root_pass  => 'root',
+    backup_dir => '/srv/backup',
+    s3_backup  => false,
+    require    => File['backup_dir']
   }
 
   ## to be able to run rails 5.2 system tests
@@ -111,17 +114,16 @@ node default {
 
   ## create database for staff-rails
   mysql::db {['hmobile_oportunities_development', 'hmobile_oportunities_test']:
-    user => 'root',
-    password => 'root',
-    collate => 'utf8_general_ci',
-    require => Class['mysql::server'],
+    collation_name => 'utf8_general_ci'
   }
 
   ## make available specific version of rbenv used in staff-rails project
   class { 'rbenv': }
   rbenv::plugin { [ 'rbenv/ruby-build' ]: }
+  rbenv::build { '2.7.7': global => true }
   rbenv::build { '2.6.5': global => true }
   rbenv::build { '2.4.6': global => true }
+  rbenv::gem { 'bundler_for_27': gem => 'bundler', version => '1.17.3', ruby_version  => '2.7.7' }
   rbenv::gem { 'bundler_for_26': gem => 'bundler', version => '1.17.3', ruby_version  => '2.6.5' }
   rbenv::gem { 'bundler_for_24': gem => 'bundler', version => '1.17.3', ruby_version  => '2.4.6' }
 
@@ -134,6 +136,9 @@ node default {
   package { 'libpq-dev' :
     ensure => present
   }
+
+  #install yarn
+  class { 'yarn': }
 
 # hmobile
 }
